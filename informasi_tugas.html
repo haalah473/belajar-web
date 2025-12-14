@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Website Manajemen Tugas Kelas 📚</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      header {
+        text-align: center;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        margin: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        width: 90%;
+        max-width: 800px;
+      }
+      h1 {
+        font-size: 3em;
+        margin: 0;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      header p {
+        font-size: 1.2em;
+        color: #666;
+        margin-top: 10px;
+      }
+      nav {
+        margin: 30px 0;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      nav button {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+      }
+      nav button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+      }
+      nav button:active {
+        transform: translateY(0);
+      }
+      .section {
+        display: none;
+        width: 90%;
+        max-width: 900px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin: 20px;
+        animation: fadeInUp 0.6s ease-out;
+        backdrop-filter: blur(10px);
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      form {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 600px) {
+        form {
+          grid-template-columns: 1fr 1fr;
+        }
+        form input[type="date"],
+        form textarea,
+        form label {
+          grid-column: 1 / -1;
+        }
+      }
+      input,
+      textarea,
+      button {
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1em;
+        font-family: inherit;
+        transition: all 0.3s ease;
+      }
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+      }
+      button {
+        background: linear-gradient(45deg, #00d2d3, #54a0ff);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 210, 211, 0.3);
+      }
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 210, 211, 0.5);
+      }
+      label {
+        font-weight: 600;
+        color: #333;
+      }
+      .task-list {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        .task-list {
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+      }
+      .task-item {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+        padding: 20px;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: slideInLeft 0.5s ease-out;
+      }
+      .task-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      .task-item.overdue {
+        background: linear-gradient(135deg, #fab1a0 0%, #e17055 100%);
+      }
+      .task-item.completed {
+        background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+        opacity: 0.8;
+      }
+      .task-item.completed strong {
+        text-decoration: line-through;
+      }
+      .task-content {
+        margin-bottom: 15px;
+      }
+      .task-deadline {
+        font-weight: 600;
+        color: #333;
+      }
+      .task-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .task-actions button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .task-actions .complete {
+        background: linear-gradient(45deg, #00b894, #00cec9);
+      }
+      .task-actions .edit {
+        background: linear-gradient(45deg, #fdcb6e, #e17055);
+      }
+      .task-actions .delete {
+        background: linear-gradient(45deg, #e17055, #d63031);
+      }
+      .task-actions button:hover {
+        transform: scale(1.05);
+      }
+      .footer {
+        margin-top: auto;
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 0.95em;
+        color: #555;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer strong {
+        color: #764ba2;
+      }
+    </style>
+  </head>
+  <footer class="footer">
+    <p>
+      © 2025 <strong>Nawawi Coders</strong> <br />
+      Website Manajemen Tugas Kelas 9A <br />
+      Dibuat oleh Tim Programmer Imam An-Nawawi
+    </p>
+  </footer>
+
+  <body>
+    <header>
+      <h1>📚 Daftar Tugas Kelas 9A</h1>
+      <p>
+        ⚠️ PERHATIAN! Website ini BUKAN buat main-main. Jangan isi tugas asal,
+        bercanda, atau ngetik yang nggak jelas. Isi data dengan benar dan
+        bertanggung jawab.
+      </p>
+    </header>
+    <nav>
+      <button onclick="showSection('add-task')">➕ Tambah Tugas</button>
+      <button onclick="showSection('view-tasks')">📋 Lihat Tugas</button>
+      <button onclick="showSection('about')">👨‍💻 Tentang Tim</button>
+    </nav>
+
+    <div id="add-task" class="section">
+      <h2>➕ Tambah Tugas Baru</h2>
+      <form id="task-form">
+        <input type="text" id="task-name" placeholder="Nama Tugas" required />
+        <textarea
+          id="task-desc"
+          placeholder="Deskripsi Tugas"
+          rows="3"
+        ></textarea>
+        <label for="task-deadline">Deadline (waktu terakhir kumpul):</label>
+        <input type="date" id="task-deadline" required />
+        <button type="submit">Tambah Tugas</button>
+      </form>
+    </div>
+
+    <div id="view-tasks" class="section">
+      <h2>
+        📋 Daftar Tugas
+        <label
+          >(Jika Waktu Tugas Telah Selesai Maka Tekan Tombol selesai)
+        </label>
+      </h2>
+      <ul id="task-list" class="task-list"></ul>
+    </div>
+    <div id="about" class="section">
+      <h2>👨‍💻 Tentang Nawawi Coders</h2>
+      <p>
+        <strong>Nawawi Coders</strong> adalah tim programmer dari
+        <em>Imam An-Nawawi</em> yang bergerak di bidang pengembangan web dan
+        teknologi.
+      </p>
+      <p>
+        Website ini dibuat untuk membantu siswa mengelola tugas kelas secara
+        rapi, modern, dan bertanggung jawab.
+      </p>
+      <ul>
+        <li>💻 HTML, CSS, JavaScript</li>
+        <li>🎨 Desain modern & responsif</li>
+        <li>📦 Penyimpanan LocalStorage</li>
+      </ul>
+    </div>
+
+    <script>
+      let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+      let editingIndex = -1;
+
+      function showSection(sectionId) {
+        document
+          .querySelectorAll(".section")
+          .forEach((sec) => (sec.style.display = "none"));
+        document.getElementById(sectionId).style.display = "block";
+        if (sectionId === "view-tasks") {
+          renderTasks();
+        }
+      }
+
+      document
+        .getElementById("task-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("task-name").value;
+          const desc = document.getElementById("task-desc").value;
+          const deadline = document.getElementById("task-deadline").value;
+
+          if (editingIndex >= 0) {
+            tasks[editingIndex] = {
+              name,
+              desc,
+              deadline,
+              completed: tasks[editingIndex].completed,
+            };
+            editingIndex = -1;
+          } else {
+            tasks.push({ name, desc, deadline, completed: false });
+          }
+
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+          document.getElementById("task-form").reset();
+          showSection("view-tasks");
+        });
+
+      function renderTasks() {
+        // Auto-delete overdue tasks that are not completed
+        tasks = tasks.filter(
+          (task) => !isOverdue(task.deadline) || task.completed
+        );
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+
+        const list = document.getElementById("task-list");
+        list.innerHTML = "";
+        tasks.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.className = `task-item ${task.completed ? "completed" : ""} ${
+            isOverdue(task.deadline) ? "overdue" : ""
+          }`;
+          li.innerHTML = `
+                    <div class="task-content">
+                        <strong>${task.name}</strong><br>
+                        ${task.desc}<br>
+                        <span class="task-deadline">Deadline: ${
+                          task.deadline
+                        }</span>
+                    </div>
+                    <div class="task-actions">
+                        <button class="complete" onclick="toggleComplete(${index})">${
+            task.completed ? "🔄 Belum Selesai" : "✅ Selesai"
+          }</button>
+                        <button class="edit" onclick="editTask(${index})">✏️ Edit</button>
+                        <button class="delete" onclick="deleteTask(${index})">🗑️ Hapus</button>
+                    </div>
+                `;
+          list.appendChild(li);
+        });
+      }
+
+      function toggleComplete(index) {
+        tasks[index].completed = !tasks[index].completed;
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        renderTasks();
+      }
+
+      function editTask(index) {
+        const task = tasks[index];
+        document.getElementById("task-name").value = task.name;
+        document.getElementById("task-desc").value = task.desc;
+        document.getElementById("task-deadline").value = task.deadline;
+        editingIndex = index;
+        showSection("add-task");
+      }
+
+      function deleteTask(index) {
+        if (confirm("Yakin ingin menghapus tugas ini?")) {
+          tasks.splice(index, 1);
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+          renderTasks();
+        }
+      }
+
+      function isOverdue(deadline) {
+        const today = new Date();
+        const dueDate = new Date(deadline);
+        return dueDate < today;
+      }
+
+      // Load tasks on page load
+      window.onload = function () {
+        showSection("view-tasks");
+      };
+    </script>
+  </body>
+</html>
